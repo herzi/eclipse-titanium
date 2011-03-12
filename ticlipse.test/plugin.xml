@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="ticlipse.projectNature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="ticlipse.natures.ProjectNature">
+         </run>
+      </runtime>
+   </extension>
+
+</plugin>

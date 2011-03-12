@@ -1,10 +1,15 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Testing Eclipse for Titanium Development
-Bundle-SymbolicName: ticlipse.test
+Bundle-SymbolicName: ticlipse.test;singleton:=true
 Bundle-Version: 0.1.1
 Bundle-Activator: ticlipse.test.Activator
 Require-Bundle: org.eclipse.ui,
- org.eclipse.core.runtime
+ org.eclipse.core.runtime,
+ org.junit4;bundle-version="4.8.1",
+ org.eclipse.core.resources
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: lib/dom4j-1.6.1.jar,
+ lib/jaxen-1.1-beta-6.jar,
+ .

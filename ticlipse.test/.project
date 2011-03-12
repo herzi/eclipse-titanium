@@ -3,6 +3,7 @@
 	<name>ticlipse.test</name>
 	<comment></comment>
 	<projects>
+		<project>ticlipse</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
