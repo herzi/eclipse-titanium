@@ -20,7 +20,10 @@ public class TitaniumProjectSupportTest {
     @SuppressWarnings("nls")
     @Test
     public void testCreateProjectWithDifferentLocationArg() throws URISyntaxException, DocumentException, CoreException {
-        String workspaceFilePath = "/media/disk/home/carlos/Projects/junit-workspace2";
+    	/* FIXME: turn this into a more secure randomized path */
+        String workspaceFilePath = System.getProperty("java.io.tmpdir");
+        workspaceFilePath += System.getProperty("file.separator");
+        workspaceFilePath += "junit-workspace2";
         File workspace = createTempWorkspace(workspaceFilePath);
 
         String projectName = "delete-me"; //$NON-NLS-1$
@@ -60,12 +63,12 @@ public class TitaniumProjectSupportTest {
     private void assertProjectDotFileAndStructureAndNatureExist(String projectPath, String name, URI location) throws DocumentException,
             CoreException {
         IProject project = TitaniumProjectSupport.createProject(name, location);
+        Assert.assertNotNull("There's no project created at " + location, project);
 
         String projectFilePath = projectPath + "/" + ".project";
         String[] emptyNodes = { "/projectDescription/comment", "/projectDescription/projects", "/projectDescription/buildSpec" };
         String[] nonEmptyNodes = { "/projectDescription/name", "/projectDescription/natures/nature" };
 
-        Assert.assertNotNull(project);
         assertFileExists(projectFilePath);
         assertAllElementsEmptyExcept(projectFilePath, emptyNodes, nonEmptyNodes);
         assertNatureIn(project);
