@@ -2,6 +2,10 @@ package ticlipse.wizards;
 
 import java.net.URI;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.ui.wizards.newresource.BasicNewProjectResourceWizard;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
 import org.eclipse.jface.wizard.Wizard;
@@ -12,11 +16,12 @@ import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 
 import ticlipse.projects.TitaniumProjectSupport;
 
-public class TitaniumProjectNewWizard extends Wizard implements INewWizard {
+public class TitaniumProjectNewWizard extends Wizard implements INewWizard, IExecutableExtension {
 	
 	private static final String WIZARD_NAME = "Titanium Project"; //$NON-NLS-1$
 	private static final String PAGE_NAME = "Titanium Project Wizard"; //$NON-NLS-1$
 	private WizardNewProjectCreationPage initialPage;
+	private IConfigurationElement configurationElement;
 	
 	@Override
 	public void addPages() {
@@ -36,7 +41,6 @@ public class TitaniumProjectNewWizard extends Wizard implements INewWizard {
 	@Override
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -49,8 +53,16 @@ public class TitaniumProjectNewWizard extends Wizard implements INewWizard {
 		} // else location == null
 		
 		TitaniumProjectSupport.createProject(name, location);
+		BasicNewProjectResourceWizard.updatePerspective (configurationElement);
 		
 		return true;
+	}
+
+	@Override
+	public void setInitializationData(IConfigurationElement config,
+			String propertyName, Object data) throws CoreException
+	{
+		configurationElement = config;
 	}
 
 }
