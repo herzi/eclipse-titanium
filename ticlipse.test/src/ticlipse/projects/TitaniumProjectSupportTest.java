@@ -73,8 +73,11 @@ public class TitaniumProjectSupportTest {
 		IProject project = TitaniumProjectSupport.createProject(name, location);
 		Assert.assertNotNull("There's no project created at " + location, project);
 		
-		System.out.println (projectPath);
-		System.out.println (project.getLocationURI().getRawPath());
+		Assert.assertEquals("UTF-8", project.getDefaultCharset());
+		
+		// TODO: implement the test commented out here
+		//System.out.println (projectPath);
+		//System.out.println (project.getLocationURI().getRawPath());
 		// Assert.assertEquals(projectPath, project.getLocationURI().getPath());
 		
 		String projectFilePath = projectPath + "/" + ".project";

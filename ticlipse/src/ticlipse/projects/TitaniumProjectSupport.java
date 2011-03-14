@@ -39,6 +39,14 @@ public class TitaniumProjectSupport {
             e.printStackTrace();
             project = null;
         }
+        
+		try {
+			// FIXME: add a progress monitor and display the progress in the dialog
+			project.setDefaultCharset("UTF-8", null);
+		} catch (CoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
         return project;
     }
