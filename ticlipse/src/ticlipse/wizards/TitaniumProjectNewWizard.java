@@ -1,5 +1,7 @@
 package ticlipse.wizards;
 
+import java.net.URI;
+
 import org.eclipse.jface.viewers.IStructuredSelection;
 
 import org.eclipse.jface.wizard.Wizard;
@@ -7,6 +9,8 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
+
+import ticlipse.projects.TitaniumProjectSupport;
 
 public class TitaniumProjectNewWizard extends Wizard implements INewWizard {
 	
@@ -37,6 +41,15 @@ public class TitaniumProjectNewWizard extends Wizard implements INewWizard {
 
 	@Override
 	public boolean performFinish() {
+		String name = initialPage.getProjectName();
+		URI location = null;
+		if (!initialPage.useDefaults()) {
+			location = initialPage.getLocationURI();
+			System.err.println("location: " + location.toString()); //$NON-NLS-1$
+		} // else location == null
+		
+		TitaniumProjectSupport.createProject(name, location);
+		
 		return true;
 	}
 
