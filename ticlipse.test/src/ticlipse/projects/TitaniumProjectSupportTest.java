@@ -17,23 +17,25 @@ import org.junit.Test;
 import ticlipse.natures.ProjectNature;
 
 public class TitaniumProjectSupportTest {
-    @SuppressWarnings("nls")
-    @Test
-    public void testCreateProjectWithDifferentLocationArg() throws URISyntaxException, DocumentException, CoreException {
-    	/* FIXME: turn this into a more secure randomized path */
-        String workspaceFilePath = System.getProperty("java.io.tmpdir");
-        workspaceFilePath += System.getProperty("file.separator");
-        workspaceFilePath += "junit-workspace2";
-        File workspace = createTempWorkspace(workspaceFilePath);
-
-        String projectName = "delete-me"; //$NON-NLS-1$
-        String projectPath = workspaceFilePath + "/" + projectName;
-        URI location = new URI("file:/" + projectPath);
-
-        assertProjectDotFileAndStructureAndNatureExist(projectPath, projectName, location);
-
-        deleteTempWorkspace(workspace);
-    }
+	@SuppressWarnings("nls")
+	@Test
+	public void testCreateProjectWithDifferentLocationArg() throws URISyntaxException, DocumentException, CoreException {
+		/* FIXME: turn this into a more secure randomized path */
+		String workspaceFilePath = System.getProperty("java.io.tmpdir");
+		if (!workspaceFilePath.endsWith("/") || !workspaceFilePath.endsWith("\\")) {
+			workspaceFilePath += System.getProperty("file.separator");
+		}
+		workspaceFilePath += "junit-workspace2";
+		File workspace = createTempWorkspace(workspaceFilePath);
+		
+		String projectName = "delete-me"; //$NON-NLS-1$
+		String projectPath = workspaceFilePath + "/" + projectName;
+		URI location = new URI("file:/" + projectPath);
+		
+		assertProjectDotFileAndStructureAndNatureExist(projectPath, projectName, location);
+		
+		deleteTempWorkspace(workspace);
+	}
 
     @Test
     public void testCreateProjectWithEmptyNameArg() {
@@ -46,38 +48,48 @@ public class TitaniumProjectSupportTest {
         String projectName = null;
         assertCreateProjectWithBadNameArg(projectName);
     }
-
-    @SuppressWarnings("nls")
-    @Test
-    public void testCreateProjectWithGoodArgs() throws DocumentException, CoreException {
-        // This is the default workspace for this plug-in
-        String workspaceFilePath = "/media/disk/home/carlos/Projects/junit-workspace";
-        String projectName = "delete-me";
-        String projectPath = workspaceFilePath + "/" + projectName;
-
-        URI location = null;
-        assertProjectDotFileAndStructureAndNatureExist(projectPath, projectName, location);
-    }
-
-    @SuppressWarnings("nls")
-    private void assertProjectDotFileAndStructureAndNatureExist(String projectPath, String name, URI location) throws DocumentException,
-            CoreException {
-        IProject project = TitaniumProjectSupport.createProject(name, location);
-        Assert.assertNotNull("There's no project created at " + location, project);
-
-        String projectFilePath = projectPath + "/" + ".project";
-        String[] emptyNodes = { "/projectDescription/comment", "/projectDescription/projects", "/projectDescription/buildSpec" };
-        String[] nonEmptyNodes = { "/projectDescription/name", "/projectDescription/natures/nature" };
-
-        assertFileExists(projectFilePath);
-        assertAllElementsEmptyExcept(projectFilePath, emptyNodes, nonEmptyNodes);
-        assertNatureIn(project);
-        assertFolderStructureIn(projectPath);
-
-        project.delete(true, null);
-    }
-
-    @SuppressWarnings("nls")
+	
+	/* FIXME: use java.nio.file.Files.isSameFile(java.nio.file.Path, java.nio.file.Path)
+	@SuppressWarnings("nls")
+	@Test
+	public void testCreateProjectWithGoodArgs() throws DocumentException, CoreException {
+		// This is the default workspace for this plug-in
+		String workspaceFilePath = System.getProperty("java.io.tmpdir");
+		if (!workspaceFilePath.endsWith("/") || !workspaceFilePath.endsWith("\\")) {
+			workspaceFilePath += System.getProperty("file.separator");
+		}
+		
+		workspaceFilePath += "junit-workspace";
+		String projectName = "delete-me";
+		String projectPath = workspaceFilePath + "/" + projectName;
+		
+		URI location = null;
+		assertProjectDotFileAndStructureAndNatureExist(projectPath, projectName, location);
+	}*/
+	
+	@SuppressWarnings("nls")
+	private void assertProjectDotFileAndStructureAndNatureExist(String projectPath, String name, URI location) throws DocumentException,
+	CoreException {
+		IProject project = TitaniumProjectSupport.createProject(name, location);
+		Assert.assertNotNull("There's no project created at " + location, project);
+		
+		System.out.println (projectPath);
+		System.out.println (project.getLocationURI().getRawPath());
+		// Assert.assertEquals(projectPath, project.getLocationURI().getPath());
+		
+		String projectFilePath = projectPath + "/" + ".project";
+		String[] emptyNodes = { "/projectDescription/comment", "/projectDescription/projects", "/projectDescription/buildSpec" };
+		String[] nonEmptyNodes = { "/projectDescription/name", "/projectDescription/natures/nature" };
+		
+		assertFileExists(projectFilePath);
+		assertAllElementsEmptyExcept(projectFilePath, emptyNodes, nonEmptyNodes);
+		assertNatureIn(project);
+		assertFolderStructureIn(projectPath);
+		
+		project.delete(true, null);
+	}
+	
+	@SuppressWarnings("nls")
     private void assertFolderStructureIn(String projectPath) {
         String[] paths = { "parent/child1-1/child2", "parent/child1-2/child2/child3" };
         for (String path : paths) {
